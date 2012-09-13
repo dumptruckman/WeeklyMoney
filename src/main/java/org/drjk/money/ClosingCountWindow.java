@@ -66,11 +66,16 @@ public class ClosingCountWindow extends JFrame implements TotalWindow {
     private final JFormattedTextField txtTotalDrawer;
     private final JFormattedTextField formattedTextField;
     private final JFormattedTextField txtCreditCards;
-    private final JFormattedTextField formattedTextField_2;
     private final JButton btnSubmit;
     private final JButton btnCancel;
     
     private volatile boolean closing;
+    private JLabel lblHfCash;
+    private JFormattedTextField formattedTextField_1;
+    private JLabel lblHfChecks;
+    private JFormattedTextField formattedTextField_3;
+    private JLabel lblHfCc;
+    private JFormattedTextField formattedTextField_4;
 
     /**
      * @wbp.parser.entryPoint
@@ -218,11 +223,30 @@ public class ClosingCountWindow extends JFrame implements TotalWindow {
         final JPanel _panel = new JPanel();
         _panel.setFocusable(false);
         contentPane.add(_panel, "cell 0 1,grow");
+        _panel.setLayout(new MigLayout("", "[][grow][][grow][][grow]", "[][]"));
+        
+        lblHfCash = new JLabel("HF Cash:");
+        _panel.add(lblHfCash, "cell 0 0,alignx trailing");
+        
+        formattedTextField_1 = new JFormattedTextField();
+        _panel.add(formattedTextField_1, "cell 1 0,growx");
+        
+        lblHfChecks = new JLabel("HF Checks:");
+        _panel.add(lblHfChecks, "cell 2 0,alignx trailing");
+        
+        formattedTextField_3 = new JFormattedTextField();
+        _panel.add(formattedTextField_3, "cell 3 0,growx");
+        
+        lblHfCc = new JLabel("HF CC:");
+        _panel.add(lblHfCc, "cell 4 0,alignx trailing");
+        
+        formattedTextField_4 = new JFormattedTextField();
+        _panel.add(formattedTextField_4, "cell 5 0,growx");
 
         final JPanel panel = new JPanel();
         panel.setFocusable(false);
         contentPane.add(panel, "cell 0 2,growx");
-        panel.setLayout(new MigLayout("", "[][grow][][grow][]", "[][][][]"));
+        panel.setLayout(new MigLayout("", "[][grow][][grow][]", "[][][][][]"));
         
         final JLabel lblTotalCash = new JLabel("Total Cash:");
         lblTotalCash.setFocusable(false);
@@ -251,20 +275,14 @@ public class ClosingCountWindow extends JFrame implements TotalWindow {
         formattedTextField = new JFormattedTextField();
         panel.add(formattedTextField, "cell 1 1,growx");
         
-        final JLabel lblTotalCc = new JLabel("Total CC:");
-        panel.add(lblTotalCc, "cell 0 2,alignx trailing");
-        
-        formattedTextField_2 = new JFormattedTextField();
-        panel.add(formattedTextField_2, "cell 1 2,growx");
-        
         final JLabel lblTotalDrawer = new JLabel("Total Drawer:");
         lblTotalDrawer.setFocusable(false);
-        panel.add(lblTotalDrawer, "cell 0 3,alignx trailing");
+        panel.add(lblTotalDrawer, "cell 0 2,alignx trailing");
         
         txtTotalDrawer = new JFormattedTextField(NumberFormat.getCurrencyInstance());
         txtTotalDrawer.setEditable(false);
         txtTotalDrawer.setFocusable(false);
-        panel.add(txtTotalDrawer, "cell 1 3,growx");
+        panel.add(txtTotalDrawer, "cell 1 2,growx");
         txtTotalDrawer.setColumns(10);
         
         btnCancel = new JButton("Cancel");
@@ -274,7 +292,7 @@ public class ClosingCountWindow extends JFrame implements TotalWindow {
                 Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
             }
         });
-        panel.add(btnCancel, "cell 4 3");
+        panel.add(btnCancel, "cell 4 2");
         
         updateTotals();
     }
