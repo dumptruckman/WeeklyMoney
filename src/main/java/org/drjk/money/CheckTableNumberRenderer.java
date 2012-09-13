@@ -1,0 +1,39 @@
+package org.drjk.money;
+
+import java.awt.Component;
+import java.text.NumberFormat;
+
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+
+class CheckTableNumberRenderer extends JLabel implements TableCellRenderer {
+
+    private static final long serialVersionUID = -8048787480804452461L;
+
+    public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+        // 'value' is value contained in the cell located at
+        // (rowIndex, vColIndex)
+
+        if (isSelected) {
+            // cell (and perhaps other cells) are selected
+        }
+
+        if (hasFocus) {
+            // this cell is the anchor and the table has the focus
+        }
+
+        // Configure the component with the specified value
+        if (value != null) {
+            try {
+                value = Double.parseDouble(value.toString());
+                setText(NumberFormat.getInstance().format(value));
+            } catch (NumberFormatException ignore) { }
+        }
+
+        // Since the renderer is a component, return itself
+        return this;
+    }
+
+}
