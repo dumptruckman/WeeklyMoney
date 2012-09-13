@@ -5,10 +5,6 @@ import java.awt.Container;
 import java.awt.ContainerOrderFocusTraversalPolicy;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Date;
 
@@ -220,30 +216,6 @@ public class OpeningCountWindow extends JFrame implements TotalWindow {
     
     public void setDate(final Date date) {
         dateBorder.setDate(date);
-        try {
-            Connection conn = MySql.getConnection();
-            PreparedStatement statement = conn.prepareStatement(MySql.OPENING_COUNT_QUERY);
-            statement.setDate(1, new java.sql.Date(date.getTime()));
-            ResultSet result = statement.executeQuery();
-            if (result.next()) {
-                txtPennies.setValue(result.getDouble("Pennies"));
-                txtNickles.setValue(result.getDouble("Nickles"));
-                txtDimes.setValue(result.getDouble("Dimes"));
-                txtQuarters.setValue(result.getDouble("Quarters"));
-                txtHalfdollars.setValue(result.getDouble("Halfdollars"));
-                txtOnes.setValue(result.getDouble("Ones"));
-                txtFives.setValue(result.getDouble("Fives"));
-                txtTens.setValue(result.getDouble("Tens"));
-                txtTwenties.setValue(result.getDouble("Twenties"));
-                txtFifties.setValue(result.getDouble("Fifties"));
-                txtHundreds.setValue(result.getDouble("Hundreds"));
-                txtReceipts.setValue(result.getDouble("Receipt Totals"));
-            }
-            result.close();
-            conn.close();
-        } catch (SQLException e) {
-            ErrorDialog.show("Error in data", e);
-        }
         updateTotals();
     }
 
@@ -278,35 +250,8 @@ public class OpeningCountWindow extends JFrame implements TotalWindow {
     private void updateAndClose(final String initials) {
         if (!closing && getDate() != null) {
             closing = true;
-            try {
-                Connection conn = MySql.getConnection();
-                PreparedStatement statement = conn.prepareStatement(MySql.OPENING_COUNT_UPDATE);
-                final java.sql.Date date = new java.sql.Date(getDate().getTime());
-                statement.setDate(1, date);
-                int i = 2;
-                for (Component comp : moneyPanel.getComponents()) {
-                    if (comp instanceof HighlightingCurrencyField) {
-                        statement.setBigDecimal(i, ((HighlightingCurrencyField) comp).getBigDecimalValue());
-                        i++;
-                    }
-                }
-                statement.setString(14, initials);
-                statement.setDate(15, date);
-                i = 16;
-                for (Component comp : moneyPanel.getComponents()) {
-                    if (comp instanceof HighlightingCurrencyField) {
-                        statement.setBigDecimal(i, ((HighlightingCurrencyField) comp).getBigDecimalValue());
-                        i++;
-                    }
-                }
-                statement.setString(28, initials);
-                statement.executeUpdate();
-                conn.close();
-                WindowEvent wev = new WindowEvent(OpeningCountWindow.this, WindowEvent.WINDOW_CLOSING);
-                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
-            } catch (SQLException e) {
-                ErrorDialog.show("Error in data", e);
-            }
+            WindowEvent wev = new WindowEvent(OpeningCountWindow.this, WindowEvent.WINDOW_CLOSING);
+            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
             closing = false;
         }
     }
